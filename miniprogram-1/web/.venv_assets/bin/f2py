@@ -1,0 +1,6 @@
+#!/Users/vector/WeChatProjects/miniprogram-1/web/.venv_assets/bin/python
+import sys
+from numpy.f2py.f2py2e import main
+if __name__ == '__main__':
+    sys.argv[0] = sys.argv[0].removesuffix('.exe')
+    sys.exit(main())

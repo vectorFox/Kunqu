@@ -1,0 +1,426 @@
+/* pages/story/story.wxss */
+page {
+  height: 100%;
+  background-color: #F5F0E8;
+}
+
+.story-container {
+  width: 100%;
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+}
+
+/* 背景层 - 使用渐变背景替代图片 */
+.background-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  background: linear-gradient(180deg, 
+    rgba(245, 240, 232, 0.95) 0%,
+    rgba(232, 224, 208, 0.9) 30%,
+    rgba(184, 212, 208, 0.85) 60%,
+    rgba(139, 179, 175, 0.8) 100%);
+  background-image: 
+    radial-gradient(circle at 20% 30%, rgba(184, 212, 208, 0.2) 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(200, 85, 84, 0.1) 0%, transparent 50%);
+}
+
+/* 前景装饰层 - 使用CSS装饰替代图片 */
+.foreground-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  opacity: 0.2;
+  pointer-events: none;
+  background-image: 
+    repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(184, 212, 208, 0.1) 10px, rgba(184, 212, 208, 0.1) 20px),
+    radial-gradient(circle at 50% 50%, transparent 40%, rgba(200, 85, 84, 0.05) 100%);
+}
+
+/* 人物立绘层 */
+.character-layer {
+  position: absolute;
+  top: 20%;
+  left: 0;
+  width: 100%;
+  height: 50%;
+  z-index: 1;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  pointer-events: none;
+}
+
+/* 人物文字描述 - 开发阶段使用，后续替换为图片 */
+.character-text {
+  height: auto;
+  max-width: 35%;
+  min-width: 200rpx;
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+  position: absolute;
+  bottom: 10%;
+  z-index: 1;
+}
+
+.character-text.master-li {
+  left: 5%;
+}
+
+.character-text.jin-liqing {
+  right: 5%;
+}
+
+.character-text.show {
+  opacity: 1;
+}
+
+.character-text.hide {
+  opacity: 0;
+  pointer-events: none;
+  display: none;
+}
+
+.character-text-box {
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 15rpx;
+  padding: 30rpx 25rpx;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.1);
+  border: 2rpx solid #B8D4D0;
+  display: flex;
+  flex-direction: column;
+  gap: 15rpx;
+}
+
+.character-title {
+  font-size: 36rpx;
+  color: #2C5F5F;
+  font-family: 'STKaiti', 'Kaiti SC', serif;
+  font-weight: bold;
+  letter-spacing: 4rpx;
+  text-align: center;
+  padding-bottom: 15rpx;
+  border-bottom: 1rpx solid rgba(184, 212, 208, 0.3);
+}
+
+.character-desc {
+  font-size: 24rpx;
+  color: #6B8E8E;
+  font-family: 'PingFang SC', sans-serif;
+  line-height: 1.6;
+  text-align: center;
+}
+
+/* 背景文字提示 */
+.background-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 48rpx;
+  color: rgba(107, 142, 142, 0.2);
+  font-family: 'STKaiti', 'Kaiti SC', serif;
+  letter-spacing: 8rpx;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* UI交互层 */
+.ui-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+/* 状态栏 */
+.status-bar {
+  width: 100%;
+  padding: 20rpx 30rpx;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10rpx);
+  border-bottom: 1rpx solid rgba(184, 212, 208, 0.3);
+}
+
+.status-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8rpx;
+}
+
+.status-label {
+  font-size: 22rpx;
+  color: #6B8E8E;
+  font-family: 'PingFang SC', sans-serif;
+}
+
+.status-value {
+  font-size: 28rpx;
+  color: #2C5F5F;
+  font-weight: bold;
+  font-family: 'PingFang SC', sans-serif;
+}
+
+.menu-button {
+  width: 60rpx;
+  height: 60rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(184, 212, 208, 0.5);
+}
+
+.menu-icon {
+  font-size: 32rpx;
+  color: #2C5F5F;
+}
+
+/* 对话框 */
+.dialog-box {
+  width: 90%;
+  max-width: 100%;
+  margin: 0 auto;
+  margin-bottom: 200rpx;
+  margin-top: 50rpx;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20rpx;
+  padding: 40rpx;
+  box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.1);
+  border: 2rpx solid #B8D4D0;
+  position: relative;
+  z-index: 3;
+  box-sizing: border-box;
+}
+
+.dialog-box::before {
+  content: '';
+  position: absolute;
+  top: -2rpx;
+  left: 0;
+  right: 0;
+  bottom: -2rpx;
+  border-radius: 20rpx;
+  background: linear-gradient(135deg, #B8D4D0, #6B8E8E);
+  z-index: -1;
+  opacity: 0.3;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.dialog-header {
+  margin-bottom: 20rpx;
+  padding-bottom: 15rpx;
+  border-bottom: 2rpx solid #B8D4D0;
+}
+
+.character-name {
+  font-size: 28rpx;
+  color: #C85554;
+  font-weight: bold;
+  font-family: 'PingFang SC', sans-serif;
+  padding: 8rpx 20rpx;
+  background: rgba(200, 85, 84, 0.1);
+  border-radius: 20rpx;
+  display: inline-block;
+}
+
+.dialog-content {
+  min-height: 120rpx;
+  word-wrap: break-word;
+  word-break: break-all;
+  overflow-wrap: break-word;
+}
+
+.story-text {
+  font-size: 30rpx;
+  line-height: 1.8;
+  color: #2C5F5F;
+  font-family: 'PingFang SC', 'STKaiti', sans-serif;
+  letter-spacing: 2rpx;
+  word-wrap: break-word;
+  word-break: break-all;
+  overflow-wrap: break-word;
+}
+
+/* 结局显示 */
+.ending-box {
+  width: 90%;
+  max-width: 100%;
+  margin: 0 auto;
+  margin-bottom: 200rpx;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20rpx;
+  padding: 60rpx 40rpx;
+  box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.15);
+  border: 3rpx solid #C85554;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.ending-header {
+  margin-bottom: 30rpx;
+}
+
+.ending-title {
+  font-size: 48rpx;
+  color: #C85554;
+  font-weight: bold;
+  font-family: 'STKaiti', 'Kaiti SC', serif;
+  letter-spacing: 4rpx;
+}
+
+.ending-content {
+  margin-bottom: 40rpx;
+}
+
+.ending-text {
+  font-size: 32rpx;
+  line-height: 2;
+  color: #2C5F5F;
+  font-family: 'PingFang SC', 'STKaiti', sans-serif;
+  letter-spacing: 2rpx;
+  word-wrap: break-word;
+  word-break: break-all;
+  overflow-wrap: break-word;
+}
+
+.ending-button {
+  width: 200rpx;
+  height: 80rpx;
+  margin: 0 auto;
+  background: linear-gradient(135deg, #B8D4D0 0%, #8FB3AF 100%);
+  border-radius: 40rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.1);
+}
+
+.ending-button .button-text {
+  font-size: 32rpx;
+  color: #FFFFFF;
+  font-weight: 500;
+}
+
+/* 选项容器 */
+.options-container {
+  width: 90%;
+  max-width: 100%;
+  margin: 0 auto 40rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+  z-index: 3;
+  position: relative;
+  box-sizing: border-box;
+}
+
+.option-item {
+  width: 100%;
+  padding: 30rpx 40rpx;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 15rpx;
+  border: 2rpx solid #B8D4D0;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  z-index: 3;
+  box-sizing: border-box;
+}
+
+.option-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(184, 212, 208, 0.3), transparent);
+  transition: left 0.5s ease;
+}
+
+.option-item:active::before {
+  left: 100%;
+}
+
+.option-item.selected {
+  background: rgba(184, 212, 208, 0.3);
+  border-color: #6B8E8E;
+  transform: scale(0.98);
+}
+
+.option-item:active {
+  transform: scale(0.95);
+  background: rgba(184, 212, 208, 0.4);
+}
+
+.option-text {
+  font-size: 28rpx;
+  color: #2C5F5F;
+  font-family: 'PingFang SC', sans-serif;
+  line-height: 1.6;
+  word-wrap: break-word;
+  word-break: break-all;
+  overflow-wrap: break-word;
+}
+
+/* 菜单弹窗 */
+.menu-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.menu-panel {
+  width: 70%;
+  max-width: 500rpx;
+  background: #FFFFFF;
+  border-radius: 20rpx;
+  padding: 40rpx;
+  box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.2);
+}
+
+.menu-item {
+  padding: 30rpx 0;
+  text-align: center;
+  border-bottom: 1rpx solid #E0E0E0;
+  font-size: 32rpx;
+  color: #2C5F5F;
+  font-family: 'PingFang SC', sans-serif;
+}
+
+.menu-item:last-child {
+  border-bottom: none;
+}
+
+.menu-item:active {
+  background: rgba(184, 212, 208, 0.1);
+}
+

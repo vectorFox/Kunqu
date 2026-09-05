@@ -1,0 +1,100 @@
+<!--pages/settings/settings.wxml-->
+<view class="settings-container">
+  <!-- 背景 -->
+  <view class="background-layer"></view>
+
+  <!-- 标题 -->
+  <view class="header-section">
+    <text class="header-title">设置</text>
+  </view>
+
+  <!-- 设置项 -->
+  <scroll-view class="settings-list" scroll-y>
+    <!-- 音乐设置 -->
+    <view class="setting-item">
+      <view class="setting-label">
+        <text class="label-text">背景音乐</text>
+        <text class="label-hint">开启/关闭背景音乐</text>
+      </view>
+      <switch class="setting-switch" checked="{{musicEnabled}}" bindchange="toggleMusic" color="#B8D4D0"/>
+    </view>
+
+    <!-- 文本速度 -->
+    <view class="setting-item">
+      <view class="setting-label">
+        <text class="label-text">文本速度</text>
+        <text class="label-hint">调整剧情文本显示速度</text>
+      </view>
+      <view class="speed-buttons">
+        <view class="speed-button {{textSpeed === 'slow' ? 'active' : ''}}" 
+              data-speed="slow"
+              bindtap="changeTextSpeed">
+          <text>慢</text>
+        </view>
+        <view class="speed-button {{textSpeed === 'medium' ? 'active' : ''}}" 
+              data-speed="medium"
+              bindtap="changeTextSpeed">
+          <text>中</text>
+        </view>
+        <view class="speed-button {{textSpeed === 'fast' ? 'active' : ''}}" 
+              data-speed="fast"
+              bindtap="changeTextSpeed">
+          <text>快</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 语言切换 -->
+    <view class="setting-item">
+      <view class="setting-label">
+        <text class="label-text">语言</text>
+        <text class="label-hint">切换界面语言</text>
+      </view>
+      <view class="language-buttons">
+        <view class="language-button {{language === 'zh' ? 'active' : ''}}" 
+              bindtap="toggleLanguage">
+          <text>中文</text>
+        </view>
+        <view class="language-button {{language === 'en' ? 'active' : ''}}" 
+              bindtap="toggleLanguage">
+          <text>English</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 自动播放 -->
+    <view class="setting-item">
+      <view class="setting-label">
+        <text class="label-text">自动播放</text>
+        <text class="label-hint">自动播放剧情文本</text>
+      </view>
+      <switch class="setting-switch" checked="{{autoPlay}}" bindchange="toggleAutoPlay" color="#B8D4D0"/>
+    </view>
+
+    <!-- 分隔线 -->
+    <view class="divider"></view>
+
+    <!-- 清除数据 -->
+    <view class="setting-item danger" bindtap="clearData">
+      <view class="setting-label">
+        <text class="label-text danger-text">清除所有数据</text>
+        <text class="label-hint">清除游戏进度和设置</text>
+      </view>
+      <text class="arrow-icon">›</text>
+    </view>
+
+    <!-- 关于 -->
+    <view class="setting-item" bindtap="showAbout">
+      <view class="setting-label">
+        <text class="label-text">关于</text>
+        <text class="label-hint">版本信息与说明</text>
+      </view>
+      <text class="arrow-icon">›</text>
+    </view>
+  </scroll-view>
+
+  <!-- 返回按钮 -->
+  <view class="back-button" bindtap="goBack">
+    <text>返回</text>
+  </view>
+</view>

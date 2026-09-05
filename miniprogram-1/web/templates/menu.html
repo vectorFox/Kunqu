@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>游园惊梦 - 昆曲文化传承</title>
+    <link rel="stylesheet" href="/static/css/common.css">
+    <link rel="stylesheet" href="/static/css/menu.css">
+</head>
+<body>
+    <div class="menu-container">
+        <!-- 背景层 -->
+        <div class="background-layer">
+            <div class="stage-curtain"></div>
+        </div>
+
+        <!-- 标题区域 -->
+        <div class="title-section">
+            <h1 class="game-title">游园惊梦</h1>
+            <p class="game-subtitle">昆曲文化传承</p>
+        </div>
+
+        <!-- 按钮区域 -->
+        <div class="button-section">
+            <button class="menu-button primary" onclick="startGame()">
+                <span class="button-text">开始游戏</span>
+                <span class="button-hint">体验昆曲之美</span>
+            </button>
+
+            {% if has_progress %}
+            <button class="menu-button secondary" onclick="continueGame()">
+                <span class="button-text">继续游戏</span>
+                <span class="button-hint">{{ user.current_chapter or '第一章' }}</span>
+            </button>
+            {% else %}
+            <button class="menu-button disabled" disabled>
+                <span class="button-text">继续游戏</span>
+                <span class="button-hint">暂无存档</span>
+            </button>
+            {% endif %}
+
+            <button class="menu-button secondary" onclick="goToArchive()">
+                <span class="button-text">学习档案</span>
+                <span class="button-hint">查看学习记录</span>
+            </button>
+
+            <button class="menu-button secondary" onclick="goToSettings()">
+                <span class="button-text">设置</span>
+                <span class="button-hint">个性化配置</span>
+            </button>
+        </div>
+
+        <!-- 底部信息 -->
+        <div class="footer">
+            <p class="footer-text">昆曲之美 · 传承千年</p>
+            <p class="footer-text version">Web演示版 v1.0</p>
+        </div>
+    </div>
+
+    <script src="/static/js/common.js"></script>
+    <script>
+        function startGame() {
+            window.location.href = '/story?mode=new';
+        }
+
+        function continueGame() {
+            window.location.href = '/story?mode=continue';
+        }
+
+        function goToArchive() {
+            window.location.href = '/archive';
+        }
+
+        function goToSettings() {
+            window.location.href = '/settings';
+        }
+    </script>
+</body>
+</html>

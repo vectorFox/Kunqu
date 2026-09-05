@@ -1,0 +1,233 @@
+{
+  "chapter": {
+    "id": "chapter1",
+    "title": "第一幕：初入戏班",
+    "description": "你是一名初入昆山戏班的新学徒，今日师父将你带到排练厅，开始你的昆曲学习之旅。",
+    "background_intro": "明朝万历年间，昆山戏班。这是一个传统的昆曲班社，排练厅内古木书案陈设，灯光淡黄柔和，窗外竹影婆娑。空气中弥漫着淡淡的墨香和戏曲的韵味，墙上挂着历代名角的画像，角落里摆放着各种戏曲道具。"
+  },
+
+  "story_nodes": [
+    {
+      "id": "start",
+      "chapter": "chapter1",
+      "text": "你是一名初入昆山戏班的新学徒。今日，师父将你带到排练厅，厅内古木书案、灯光淡黄，窗外竹影婆娑。师父轻抚长须，温和地看着你说道：'孩子，从今日起，你便是这戏班的一员了。昆曲之道，博大精深，你需用心体会。'",
+      "character": "师父",
+      "characterId": "master_li",
+      "options": [
+        {
+          "text": "仔细观察排练厅的环境",
+          "next": "observe",
+          "condition": null,
+          "effect": {
+            "understandingValue": 1
+          }
+        },
+        {
+          "text": "主动向师父请教昆曲的基本知识",
+          "next": "ask_teacher",
+          "condition": null,
+          "effect": {
+            "understandingValue": 1
+          }
+        }
+      ],
+      "background": "rehearsal_hall",
+      "music": "peaceful",
+      "order": 1
+    },
+    {
+      "id": "observe",
+      "chapter": "chapter1",
+      "text": "你仔细环顾四周。排练厅虽不大，却处处透着雅致。你注意到厅内有一名青衣正在练习水袖，动作如行云流水，每一个转身都带着说不出的韵味。师父轻声说道：'这是你的师姐金丽卿，她专攻旦角，已有十年功底。'",
+      "character": "师父",
+      "characterId": "master_li",
+      "secondaryCharacter": "金丽卿",
+      "secondaryCharacterId": "jin_liqing",
+      "options": [
+        {
+          "text": "继续观察她的动作，学习她的技巧",
+          "next": "watch_practice",
+          "condition": null,
+          "effect": {
+            "understandingValue": 2
+          }
+        },
+        {
+          "text": "主动上前询问她是否不适",
+          "next": "ask_health",
+          "condition": null,
+          "effect": {
+            "favorValue": 2,
+            "understandingValue": 1
+          }
+        }
+      ],
+      "background": "rehearsal_hall",
+      "music": "peaceful",
+      "order": 2
+    },
+    {
+      "id": "ask_teacher",
+      "chapter": "chapter1",
+      "text": "你恭敬地向师父行礼，问道：'师父，弟子初来乍到，不知昆曲之道，当从何处学起？'师父微笑着看着你：'昆曲之道，在于'水磨腔'的婉转、节奏的舒缓。你先要理解行当分类，才能深入其中。行当分为生、旦、净、末、丑五大类，每一类都有其独特的表演特色。'",
+      "character": "师父",
+      "characterId": "master_li",
+      "options": [
+        {
+          "text": "询问行当分类的具体内容",
+          "next": "quiz_hangdang",
+          "condition": null
+        },
+        {
+          "text": "询问水磨腔的特点和由来",
+          "next": "quiz_shuimo",
+          "condition": null
+        }
+      ],
+      "background": "rehearsal_hall",
+      "music": "peaceful",
+      "order": 2
+    },
+    {
+      "id": "quiz_hangdang",
+      "chapter": "chapter1",
+      "type": "quiz",
+      "quizId": "quiz_hangdang_1",
+      "text": "师父要考验你对昆曲行当的理解。",
+      "next": "after_quiz_hangdang",
+      "background": "rehearsal_hall",
+      "order": 3
+    },
+    {
+      "id": "after_quiz_hangdang",
+      "chapter": "chapter1",
+      "text": "师父点点头：'不错，你对行当已有初步了解。昆曲行当分为生、旦、净、末、丑五大类，每一类都有其独特的表演特色。生角多扮演男性角色，旦角多扮演女性角色，净角多扮演性格刚烈的角色，末角多扮演中老年男性，丑角则多扮演滑稽角色。'你认真地记下师父的话。",
+      "character": "师父",
+      "characterId": "master_li",
+      "options": [
+        {
+          "text": "继续学习",
+          "next": "continue_learning",
+          "condition": null
+        }
+      ],
+      "background": "rehearsal_hall",
+      "music": "peaceful",
+      "order": 4,
+      "effect": {
+        "understandingValue": 1,
+        "score": 10
+      }
+    }
+  ],
+
+  "quiz": [
+    {
+      "id": "quiz_hangdang_1",
+      "question": "昆曲的行当分为哪五大类？",
+      "type": "single",
+      "options": [
+        "A. 生、旦、净、末、丑",
+        "B. 生、旦、净、末、小",
+        "C. 生、旦、净、末、武",
+        "D. 生、旦、净、末、老"
+      ],
+      "answer": 0,
+      "explanation": "昆曲行当分为生、旦、净、末、丑五大类，每一类都有其独特的表演特色和角色定位。生角多扮演男性角色，旦角多扮演女性角色，净角多扮演性格刚烈的角色，末角多扮演中老年男性，丑角则多扮演滑稽角色。",
+      "category": "hangdang",
+      "difficulty": "easy",
+      "points": 10
+    }
+  ],
+
+  "characters": [
+    {
+      "id": "master_li",
+      "name": "李师父",
+      "fullName": "李德明",
+      "role": "师父/班主",
+      "age": "五十余岁",
+      "appearance": "中等身材，面容慈祥，长须花白，目光温和而有神。常穿深色长衫，腰间系着一条素色腰带。",
+      "personality": "温和慈祥，对弟子循循善诱，深谙昆曲之道，是昆山戏班的精神支柱。",
+      "background": "李德明是昆山戏班的班主，从艺三十余年，精通昆曲各个行当，尤其擅长生角和净角。他年轻时曾在苏州、南京等地演出，声名远播。",
+      "play": null,
+      "type": "teacher"
+    },
+    {
+      "id": "jin_liqing",
+      "name": "金丽卿",
+      "fullName": "金丽卿",
+      "role": "旦角",
+      "age": "二十三四岁",
+      "appearance": "身材修长，面容清秀，眉目如画。常穿青色戏服，水袖飘逸，动作优雅。",
+      "personality": "性格温婉，对艺术执着认真，对新人友善但要求严格。",
+      "background": "金丽卿是戏班中的旦角新秀，专攻青衣、花旦，已有十年功底。她擅长演绎《牡丹亭》中的杜丽娘、《西厢记》中的崔莺莺等角色。",
+      "play": "《牡丹亭》《西厢记》",
+      "type": "student"
+    }
+  ],
+
+  "image_prompts": {
+    "background": {
+      "id": "rehearsal_hall",
+      "name": "排练厅背景",
+      "description": "昆曲排练厅室内场景",
+      "prompt_chinese": "明朝风格的传统昆曲排练厅，古木书案陈设，淡黄色柔光照明，窗外竹影婆娑，墙上挂着历代名角画像，角落摆放戏曲道具，水墨画风格，淡青色和米白色调，柔和的自然光，优雅的文人气息",
+      "prompt_english": "Traditional Kunqu opera rehearsal hall in Ming Dynasty style, ancient wooden desk and furnishings, soft yellow lighting, bamboo shadows outside the window, portraits of famous actors on the wall, opera props in the corner, ink painting style, light cyan and beige tones, soft natural light, elegant scholarly atmosphere",
+      "style": "Chinese ink painting, soft colors, elegant",
+      "colors": ["#B8D4D0", "#F5F0E8", "#E8E0D0"],
+      "aspect_ratio": "9:16",
+      "lighting": "soft natural light from top left, 45 degrees"
+    },
+    "foreground": {
+      "id": "rehearsal_hall_foreground",
+      "name": "排练厅前景",
+      "description": "排练厅前景装饰元素",
+      "prompt_chinese": "昆曲排练厅前景装饰，折扇形边框元素，淡墨渲染的梅花纹理，水袖流线装饰，古典花窗纹样，半透明效果，淡青色和朱砂红点缀，留白构图，优雅的层次感",
+      "prompt_english": "Kunqu rehearsal hall foreground decoration, folding fan-shaped border elements, light ink-rendered plum blossom textures, water sleeve flowing line decorations, classical flower window patterns, semi-transparent effect, light cyan and vermillion red accents, white space composition, elegant layering",
+      "style": "Decorative elements, semi-transparent overlay",
+      "colors": ["#B8D4D0", "#C85554", "transparent"],
+      "aspect_ratio": "9:16",
+      "usage": "foreground overlay decoration"
+    }
+  },
+
+  "character_images": {
+    "master_li": {
+      "id": "master_li",
+      "name": "李师父立绘",
+      "description": "李师父半身立绘",
+      "prompt_chinese": "明朝昆曲班主，五十余岁，面容慈祥，长须花白，目光温和，身穿深色长衫，腰间素色腰带，半身像，中国传统人物画风格，淡墨渲染，淡青色和米白色调，背景虚化，柔和的自然光，文人气质，优雅的笔触",
+      "prompt_english": "Ming Dynasty Kunqu opera master, in his fifties, kind face, white long beard, gentle eyes, wearing dark long gown, plain belt at waist, half-body portrait, traditional Chinese figure painting style, light ink rendering, light cyan and beige tones, blurred background, soft natural light, scholarly temperament, elegant brushstrokes",
+      "style": "Chinese traditional figure painting",
+      "colors": ["#2C5F5F", "#B8D4D0", "#F5F0E8"],
+      "aspect_ratio": "3:4",
+      "position": "center or left",
+      "expression": "kind and gentle"
+    },
+    "jin_liqing": {
+      "id": "jin_liqing",
+      "name": "金丽卿立绘",
+      "description": "金丽卿半身立绘",
+      "prompt_chinese": "明朝昆曲旦角演员，二十三四岁，面容清秀，眉目如画，身穿青色戏服，水袖飘逸，半身像，中国传统人物画风格，淡墨渲染，淡青色和粉白色调，背景虚化，柔和的自然光，优雅的戏曲美感，细腻的笔触",
+      "prompt_english": "Ming Dynasty Kunqu opera dan role actress, twenty-three or twenty-four years old, beautiful face, painted eyebrows, wearing cyan opera costume, flowing water sleeves, half-body portrait, traditional Chinese figure painting style, light ink rendering, light cyan and pink-white tones, blurred background, soft natural light, elegant opera beauty, delicate brushstrokes",
+      "style": "Chinese traditional figure painting",
+      "colors": ["#B8D4D0", "#F5F0E8", "#E8E0D0"],
+      "aspect_ratio": "3:4",
+      "position": "center or right",
+      "expression": "gentle and elegant"
+    }
+  },
+
+  "music": {
+    "peaceful": {
+      "id": "peaceful",
+      "name": "宁静祥和",
+      "description": "第一幕背景音乐，宁静祥和的氛围",
+      "style": "Traditional Chinese music, Kunqu style, soft and peaceful",
+      "instruments": ["笛子", "古筝", "琵琶"],
+      "mood": "calm, peaceful, scholarly"
+    }
+  }
+}
+

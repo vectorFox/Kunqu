@@ -1,0 +1,175 @@
+/* 游园惊梦 - 通用样式 */
+/* 与小程序配色保持一致 */
+
+:root {
+    /* 昆曲配色 */
+    --primary: #B8D4D0;        /* 淡青 */
+    --accent: #C85554;         /* 朱砂红 */
+    --secondary: #6B8E8E;      /* 青灰 */
+    --light: #E8E0D0;          /* 淡米色 */
+    --background: #F5F0E8;     /* 米白 */
+    --text: #2C5F5F;           /* 黛蓝 */
+    --text-light: #6B8E8E;     /* 浅色文字 */
+    --white: #FFFFFF;
+    --shadow: rgba(0, 0, 0, 0.1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    font-family: 'PingFang SC', 'STKaiti', 'Kaiti SC', sans-serif;
+    background-color: var(--background);
+    color: var(--text);
+    overflow-x: hidden;
+}
+
+/* 禁用选择 */
+body {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* 通用按钮样式 */
+.btn {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 15px 30px;
+    border: none;
+    border-radius: 25px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px var(--shadow);
+}
+
+.btn:active {
+    transform: scale(0.95);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary) 0%, #8FB3AF 100%);
+    color: var(--white);
+    border: 2px solid var(--secondary);
+}
+
+.btn-secondary {
+    background: linear-gradient(135deg, var(--background) 0%, var(--light) 100%);
+    color: var(--text);
+    border: 2px solid var(--primary);
+}
+
+.btn-disabled {
+    opacity: 0.5;
+    background: #E0E0E0;
+    border-color: #CCCCCC;
+    cursor: not-allowed;
+}
+
+/* 通用对话框 */
+.dialog-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.dialog-panel {
+    width: 70%;
+    max-width: 500px;
+    background: var(--white);
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+.dialog-item {
+    padding: 15px 0;
+    text-align: center;
+    border-bottom: 1px solid #E0E0E0;
+    font-size: 16px;
+    color: var(--text);
+    cursor: pointer;
+}
+
+.dialog-item:last-child {
+    border-bottom: none;
+}
+
+.dialog-item:active {
+    background: rgba(184, 212, 208, 0.1);
+}
+
+/* 加载动画 */
+.loading {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(245, 240, 232, 0.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+}
+
+.loading-spinner {
+    width: 50px;
+    height: 50px;
+    border: 4px solid var(--light);
+    border-top-color: var(--primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Toast提示 */
+.toast {
+    position: fixed;
+    bottom: 20%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(44, 95, 95, 0.9);
+    color: var(--white);
+    padding: 12px 24px;
+    border-radius: 25px;
+    font-size: 14px;
+    z-index: 3000;
+    animation: fadeInOut 2s ease;
+}
+
+@keyframes fadeInOut {
+    0% { opacity: 0; transform: translateX(-50%) translateY(20px); }
+    15% { opacity: 1; transform: translateX(-50%) translateY(0); }
+    85% { opacity: 1; transform: translateX(-50%) translateY(0); }
+    100% { opacity: 0; transform: translateX(-50%) translateY(-20px); }
+}
+
+/* 响应式设计 */
+@media (max-width: 480px) {
+    .btn {
+        padding: 12px 24px;
+        font-size: 14px;
+    }
+}

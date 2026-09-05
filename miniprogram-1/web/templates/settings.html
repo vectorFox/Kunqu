@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>游园惊梦 - 设置</title>
+    <link rel="stylesheet" href="/static/css/common.css">
+    <link rel="stylesheet" href="/static/css/settings.css">
+</head>
+<body>
+    <div class="settings-container">
+        <!-- 背景层 -->
+        <div class="background-layer"></div>
+
+        <!-- 页面标题 -->
+        <div class="page-header">
+            <h1 class="page-title">设置</h1>
+            <button class="back-button" onclick="goBack()">返回</button>
+        </div>
+
+        <!-- 设置内容 -->
+        <div class="settings-content">
+            <!-- 关于 -->
+            <div class="settings-section">
+                <h2 class="section-title">关于</h2>
+                <div class="settings-item">
+                    <span class="item-label">游戏名称</span>
+                    <span class="item-value">游园惊梦</span>
+                </div>
+                <div class="settings-item">
+                    <span class="item-label">版本</span>
+                    <span class="item-value">Web演示版 v1.0</span>
+                </div>
+                <div class="settings-item">
+                    <span class="item-label">主题</span>
+                    <span class="item-value">昆曲文化传承</span>
+                </div>
+            </div>
+
+            <!-- 游戏设置 -->
+            <div class="settings-section">
+                <h2 class="section-title">游戏</h2>
+                <div class="settings-item">
+                    <span class="item-label">当前积分</span>
+                    <span class="item-value">{{ user.score }}</span>
+                </div>
+                <div class="settings-item">
+                    <span class="item-label">游戏进度</span>
+                    <span class="item-value">{{ user.current_chapter or '第一章' }}</span>
+                </div>
+            </div>
+
+            <!-- 数据管理 -->
+            <div class="settings-section">
+                <h2 class="section-title">数据管理</h2>
+                <div class="settings-item danger">
+                    <span class="item-label">清除所有数据</span>
+                    <button class="danger-button" onclick="clearData()">清除</button>
+                </div>
+                <p class="warning-text">注意：清除数据后将无法恢复，包括游戏进度和答题记录</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function goBack() {
+            window.location.href = '/';
+        }
+
+        function clearData() {
+            if (confirm('确定要清除所有数据吗？此操作不可恢复！')) {
+                fetch('/api/settings/clear', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        user_id: getUserId(),
+                        option_index: 0,
+                        current_node_id: 'start',
+                        game_state: {}
+                    })
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('数据已清除');
+                        window.location.href = '/';
+                    }
+                });
+            }
+        }
+
+        function getUserId() {
+            const match = document.cookie.match(/user_id=([^;]+)/);
+            return match ? match[1] : '';
+        }
+    </script>
+</body>
+</html>

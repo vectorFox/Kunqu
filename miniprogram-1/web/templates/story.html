@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>游园惊梦 - 剧情</title>
+    <link rel="stylesheet" href="/static/css/common.css">
+    <link rel="stylesheet" href="/static/css/story.css">
+</head>
+<body>
+    <div class="story-container">
+        <!-- 背景 -->
+        <div class="background-layer">
+            <img class="background-image" src="/static/images/backgrounds/{{ current_node.background or 'rehearsal_hall' }}.png" alt="" onerror="this.style.display='none'">
+        </div>
+
+        <!-- 人物立绘 -->
+        <div class="character-layer">
+            <div class="character-sprite master-li {% if current_node.characterId == 'master_li' %}show{% else %}hide{% endif %}">
+                <img src="/static/images/characters/master_li.png" alt="李师父" onerror="this.style.display='none'">
+            </div>
+            <div class="character-sprite jin-liqing {% if current_node.characterId == 'jin_liqing' %}show{% else %}hide{% endif %}">
+                <img src="/static/images/characters/jin_liqing.png" alt="金丽卿" onerror="this.style.display='none'">
+            </div>
+        </div>
+
+        <!-- UI层 -->
+        <div class="ui-layer">
+            <!-- 状态栏 -->
+            <div class="status-bar">
+                <div class="status-item"><span class="status-label">理解值</span><span class="status-value" id="understanding">{{ game_state.understandingValue }}</span></div>
+                <div class="status-item"><span class="status-label">好感值</span><span class="status-value" id="favor">{{ game_state.favorValue }}</span></div>
+                <div class="status-item"><span class="status-label">积分</span><span class="status-value" id="score">{{ game_state.score }}</span></div>
+                <div class="menu-button" onclick="toggleMenu()">☰</div>
+            </div>
+
+            <!-- 底部区域 -->
+            <div class="bottom-area">
+                <!-- 选项 -->
+                <div class="options-container" id="options-container" style="display: {% if available_options and not is_ending %}flex{% else %}none{% endif %}">
+                    {% for option in available_options %}
+                    <div class="option-item" data-index="{{ loop.index0 }}" onclick="selectOption(this)">
+                        <span class="option-text">{{ option.text }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <!-- 对话框 -->
+                <div class="dialog-box" id="dialog-box" style="display: {% if is_ending %}none{% else %}block{% endif %}">
+                    <div class="dialog-nameplate">{{ current_node.character }}</div>
+                    <div class="dialog-body">
+                        <div class="dialog-content">
+                            <p class="story-text">{{ current_node.text }}</p>
+                        </div>
+                        <div class="dialog-controls">
+                            <button class="dialog-ctrl-btn dialog-ctrl-next" onclick="handleNext()">▶</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 结局 -->
+                <div class="ending-box" id="ending-box" style="display: {% if is_ending %}block{% else %}none{% endif %}">
+                    <div class="ending-header"><span class="ending-title">{{ current_node.endingName }}</span></div>
+                    <div class="ending-content"><p class="ending-text">{{ current_node.text }}</p></div>
+                    <div class="ending-button" onclick="goHome()">返回</div>
+                </div>
+            </div>
+
+            <!-- 菜单 -->
+            <div class="menu-overlay" id="menu-overlay" style="display: none;" onclick="toggleMenu()">
+                <div class="menu-panel" onclick="event.stopPropagation()">
+                    <div class="menu-item" onclick="goHome()">返回主菜单</div>
+                    <div class="menu-item" onclick="restartGame()">重新开始</div>
+                    <div class="menu-item" onclick="toggleMenu()">取消</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 加载中 -->
+    <div class="loading" id="loading" style="display: none;">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <script>
+        // 全局状态
+        let currentNodeId = '{{ current_node.id }}';
+        let gameState = {{ game_state | tojson }};
+        let isEnding = {{ 'true' if is_ending else 'false' }};
+        let isSelecting = false;
+        let isQuiz = {{ 'true' if current_node.type == 'quiz' else 'false' }};
+        let quizCategory = '{{ current_node.quizCategory | default("") }}';
+        let quizNextNode = '{{ current_node.next | default("") }}';
+
+        // 页面加载
+        document.addEventListener('DOMContentLoaded', function() {
+            // 问答节点自动跳转
+            if (isQuiz) {
+                setTimeout(() => {
+                    window.location.href = '/quiz?category=' + quizCategory + '&next_node=' + quizNextNode;
+                }, 500);
+            }
+        });
+
+        // 菜单
+        function toggleMenu() {
+            const el = document.getElementById('menu-overlay');
+            el.style.display = el.style.display === 'none' ? 'flex' : 'none';
+        }
+
+        function goHome() {
+            window.location.href = '/';
+        }
+
+        // 重新开始
+        function restartGame() {
+            if (!confirm('确定要重新开始吗？当前进度将丢失。')) return;
+            showLoading();
+            fetch('/api/story/restart', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    user_id: getUserId(),
+                    current_node_id: currentNodeId,
+                    game_state: gameState
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) location.reload();
+            })
+            .finally(() => {
+                hideLoading();
+                toggleMenu();
+            });
+        }
+
+        // 选择选项
+        function selectOption(el) {
+            if (isSelecting || isEnding) return;
+            isSelecting = true;
+            const index = parseInt(el.dataset.index);
+            el.classList.add('selected');
+
+            showLoading();
+            fetch('/api/story/select', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    user_id: getUserId(),
+                    option_index: index,
+                    current_node_id: currentNodeId,
+                    game_state: gameState
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    currentNodeId = data.next_node.id;
+                    gameState = data.game_state;
+                    updateUI(data.next_node, data.available_options || [], data.is_ending);
+                    
+                    if (data.is_quiz) {
+                        setTimeout(() => {
+                            window.location.href = '/quiz?category=' + (data.next_node.quizCategory || 'general') + '&next_node=' + (data.next_node.next || '');
+                        }, 500);
+                    }
+                } else {
+                    showToast(data.error || '选择失败');
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                showToast('操作失败');
+            })
+            .finally(() => {
+                hideLoading();
+                setTimeout(() => isSelecting = false, 300);
+            });
+        }
+
+        // 下一步/推进
+        function handleNext() {
+            if (isSelecting || isEnding) return;
+            
+            // 有选项时，选第一个
+            const firstOption = document.querySelector('.option-item');
+            if (firstOption) {
+                selectOption(firstOption);
+                return;
+            }
+            
+            // 无选项，推进剧情
+            isSelecting = true;
+            showLoading();
+            fetch('/api/story/advance', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    user_id: getUserId(),
+                    current_node_id: currentNodeId,
+                    game_state: gameState
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    currentNodeId = data.next_node.id;
+                    gameState = data.game_state;
+                    updateUI(data.next_node, data.available_options || [], data.is_ending);
+                    
+                    if (data.is_quiz) {
+                        setTimeout(() => {
+                            window.location.href = '/quiz?category=' + (data.next_node.quizCategory || 'general') + '&next_node=' + (data.next_node.next || '');
+                        }, 500);
+                    }
+                } else {
+                    showToast(data.error || '无法继续');
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                showToast('操作失败');
+            })
+            .finally(() => {
+                hideLoading();
+                setTimeout(() => isSelecting = false, 300);
+            });
+        }
+
+        // 更新界面
+        function updateUI(node, options, ending) {
+            // 状态栏
+            document.getElementById('understanding').textContent = gameState.understandingValue;
+            document.getElementById('favor').textContent = gameState.favorValue;
+            document.getElementById('score').textContent = gameState.score;
+
+            // 背景图
+            const bgImg = document.querySelector('.background-image');
+            if (bgImg && node.background) {
+                bgImg.src = '/static/images/backgrounds/' + node.background + '.png';
+            }
+
+            // 人物显示
+            const showMaster = node.characterId === 'master_li';
+            const showJin = node.characterId === 'jin_liqing';
+            document.querySelectorAll('.master-li').forEach(el => el.className = 'character-sprite master-li ' + (showMaster ? 'show' : 'hide'));
+            document.querySelectorAll('.jin-liqing').forEach(el => el.className = 'character-sprite jin-liqing ' + (showJin ? 'show' : 'hide'));
+
+            if (ending) {
+                // 结局
+                document.querySelectorAll('.character-sprite').forEach(el => el.className += ' hide');
+                document.getElementById('dialog-box').style.display = 'none';
+                document.getElementById('options-container').style.display = 'none';
+                document.getElementById('ending-box').style.display = 'block';
+                document.querySelector('#ending-box .ending-title').textContent = node.endingName || '';
+                document.querySelector('#ending-box .ending-text').textContent = node.text || '';
+                isEnding = true;
+            } else {
+                // 对话框
+                document.getElementById('ending-box').style.display = 'none';
+                document.getElementById('dialog-box').style.display = 'block';
+                document.querySelector('.dialog-nameplate').textContent = node.character || '旁白';
+                document.querySelector('.story-text').textContent = node.text || '';
+
+                // 选项
+                const optContainer = document.getElementById('options-container');
+                optContainer.innerHTML = '';
+                if (options && options.length > 0) {
+                    optContainer.style.display = 'flex';
+                    options.forEach((opt, idx) => {
+                        const div = document.createElement('div');
+                        div.className = 'option-item';
+                        div.dataset.index = idx;
+                        div.onclick = function() { selectOption(this); };
+                        div.innerHTML = '<span class="option-text">' + opt.text + '</span>';
+                        optContainer.appendChild(div);
+                    });
+                } else {
+                    optContainer.style.display = 'none';
+                }
+            }
+        }
+
+        // 工具
+        function getUserId() {
+            const match = document.cookie.match(/user_id=([^;]+)/);
+            return match ? match[1] : '';
+        }
+
+        function showLoading() {
+            document.getElementById('loading').style.display = 'flex';
+        }
+
+        function hideLoading() {
+            document.getElementById('loading').style.display = 'none';
+        }
+
+        function showToast(msg) {
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.textContent = msg;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 2000);
+        }
+    </script>
+</body>
+</html>

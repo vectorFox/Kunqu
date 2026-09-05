@@ -1,0 +1,201 @@
+/* pages/settings/settings.wxss */
+page {
+  height: 100%;
+  background-color: #F5F0E8;
+}
+
+.settings-container {
+  width: 100%;
+  height: 100vh;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 40rpx 30rpx;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+/* 背景层 */
+.background-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  background: linear-gradient(180deg, 
+    rgba(245, 240, 232, 0.95) 0%,
+    rgba(232, 224, 208, 0.9) 50%,
+    rgba(184, 212, 208, 0.85) 100%);
+}
+
+/* 标题区域 */
+.header-section {
+  z-index: 1;
+  text-align: center;
+  margin-bottom: 40rpx;
+  padding: 30rpx 0;
+  border-bottom: 2rpx solid rgba(184, 212, 208, 0.3);
+}
+
+.header-title {
+  font-size: 48rpx;
+  color: #2C5F5F;
+  font-weight: bold;
+  font-family: 'STKaiti', 'Kaiti SC', serif;
+  letter-spacing: 6rpx;
+}
+
+/* 设置列表 */
+.settings-list {
+  flex: 1;
+  z-index: 1;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.setting-item {
+  width: 100%;
+  padding: 30rpx;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 15rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.05);
+  border: 1rpx solid rgba(184, 212, 208, 0.3);
+  box-sizing: border-box;
+}
+
+.setting-item:active {
+  background: rgba(184, 212, 208, 0.1);
+}
+
+.setting-item.danger:active {
+  background: rgba(244, 67, 54, 0.1);
+}
+
+.setting-label {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+  min-width: 0;
+  margin-right: 20rpx;
+}
+
+.label-text {
+  font-size: 30rpx;
+  color: #2C5F5F;
+  font-weight: 500;
+  font-family: 'PingFang SC', sans-serif;
+}
+
+.label-text.danger-text {
+  color: #F44336;
+}
+
+.label-hint {
+  font-size: 24rpx;
+  color: #999999;
+  font-family: 'PingFang SC', sans-serif;
+}
+
+.setting-switch {
+  transform: scale(1.2);
+  flex-shrink: 0;
+}
+
+/* 速度按钮 */
+.speed-buttons {
+  display: flex;
+  gap: 15rpx;
+  flex-shrink: 0;
+}
+
+.speed-button {
+  min-width: 80rpx;
+  height: 60rpx;
+  padding: 0 25rpx;
+  background: rgba(255, 255, 255, 0.9);
+  border: 2rpx solid #B8D4D0;
+  border-radius: 30rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26rpx;
+  color: #6B8E8E;
+  font-family: 'PingFang SC', sans-serif;
+  transition: all 0.3s ease;
+}
+
+.speed-button.active {
+  background: linear-gradient(135deg, #B8D4D0 0%, #8FB3AF 100%);
+  border-color: #6B8E8E;
+  color: #FFFFFF;
+}
+
+/* 语言按钮 */
+.language-buttons {
+  display: flex;
+  gap: 15rpx;
+  flex-shrink: 0;
+}
+
+.language-button {
+  min-width: 120rpx;
+  height: 60rpx;
+  padding: 0 25rpx;
+  background: rgba(255, 255, 255, 0.9);
+  border: 2rpx solid #B8D4D0;
+  border-radius: 30rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26rpx;
+  color: #6B8E8E;
+  font-family: 'PingFang SC', sans-serif;
+  transition: all 0.3s ease;
+}
+
+.language-button.active {
+  background: linear-gradient(135deg, #B8D4D0 0%, #8FB3AF 100%);
+  border-color: #6B8E8E;
+  color: #FFFFFF;
+}
+
+.arrow-icon {
+  font-size: 40rpx;
+  color: #999999;
+  margin-left: 20rpx;
+  flex-shrink: 0;
+}
+
+/* 分隔线 */
+.divider {
+  height: 2rpx;
+  background: rgba(184, 212, 208, 0.3);
+  margin: 30rpx 0;
+}
+
+/* 返回按钮 */
+.back-button {
+  z-index: 1;
+  width: 100%;
+  height: 90rpx;
+  margin-top: 30rpx;
+  background: linear-gradient(135deg, #B8D4D0 0%, #8FB3AF 100%);
+  border-radius: 45rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.1);
+}
+
+.back-button text {
+  font-size: 32rpx;
+  color: #FFFFFF;
+  font-weight: 500;
+  font-family: 'PingFang SC', sans-serif;
+}

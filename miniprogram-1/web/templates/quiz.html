@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>游园惊梦 - 知识考验</title>
+    <link rel="stylesheet" href="/static/css/common.css">
+    <link rel="stylesheet" href="/static/css/quiz.css">
+</head>
+<body>
+    <div class="quiz-container">
+        <!-- 背景 -->
+        <div class="background-layer"></div>
+
+        <!-- 题目区域 -->
+        <div class="quiz-content">
+            <div class="quiz-header">
+                <h2 class="quiz-title">知识考验</h2>
+            </div>
+
+            <div class="question-box" id="question-box">
+                <p class="question-text" id="question-text">{{ quiz.question }}</p>
+            </div>
+
+            <!-- 选项 -->
+            <div class="options-container" id="options-container">
+                {% for option in quiz.options %}
+                <div class="option-item {% if loop.index0 == 0 %}selected{% endif %}"
+                     data-index="{{ loop.index0 }}"
+                     onclick="selectAnswer(this)">
+                    <span class="option-text">{{ option }}</span>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- 结果显示 -->
+            <div class="result-box" id="result-box" style="display: none;">
+                <div class="result-icon" id="result-icon">
+                    <span id="result-mark"></span>
+                </div>
+                <div class="result-text">
+                    <p class="result-message" id="result-message"></p>
+                </div>
+                <div class="explanation-box">
+                    <span class="explanation-label">解析：</span>
+                    <p class="explanation-text" id="explanation-text"></p>
+                </div>
+                <div class="result-buttons">
+                    <button class="result-button secondary" id="retry-btn" onclick="retryQuiz()" style="display: none;">
+                        重新答题
+                    </button>
+                    <button class="result-button primary" onclick="continueGame()">
+                        继续
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let quiz = {{ quiz | tojson }};
+        let selectedIndex = -1;
+        let showResult = false;
+        let nextNode = '{{ next_node }}';
+        let category = '{{ category }}';
+
+        function selectAnswer(element) {
+            if (showResult) return;
+
+            selectedIndex = parseInt(element.dataset.index);
+
+            // 更新选中状态
+            document.querySelectorAll('.option-item').forEach((item, index) => {
+                item.classList.toggle('selected', index === selectedIndex);
+            });
+
+            // 延迟显示结果
+            setTimeout(() => {
+                showResult = true;
+
+                // 提交答案
+                fetch('/api/quiz/answer', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        user_id: getUserId(),
+                        selected_index: selectedIndex,
+                        category: category,
+                        next_node: nextNode
+                    })
+                })
+                .then(res => res.json())
+                .then(result => {
+                    displayResult(result);
+                });
+            }, 500);
+        }
+
+        function displayResult(result) {
+            const isCorrect = result.isCorrect;
+
+            // 显示结果区域
+            document.getElementById('options-container').style.display = 'none';
+            document.getElementById('result-box').style.display = 'block';
+
+            // 更新结果图标
+            const icon = document.getElementById('result-icon');
+            icon.className = 'result-icon ' + (isCorrect ? 'correct' : 'incorrect');
+            document.getElementById('result-mark').textContent = isCorrect ? '✓' : '✗';
+
+            // 更新结果文字
+            document.getElementById('result-message').textContent = isCorrect ? '回答正确！' : '回答错误';
+
+            // 更新解析
+            document.getElementById('explanation-text').textContent = result.explanation;
+
+            // 显示重新答题按钮（仅错误时）
+            document.getElementById('retry-btn').style.display = isCorrect ? 'none' : 'block';
+        }
+
+        function retryQuiz() {
+            selectedIndex = -1;
+            showResult = false;
+
+            document.getElementById('result-box').style.display = 'none';
+            document.getElementById('options-container').style.display = 'flex';
+
+            document.querySelectorAll('.option-item').forEach(item => {
+                item.classList.remove('selected');
+            });
+        }
+
+        function continueGame() {
+            if (nextNode) {
+                window.location.href = '/story?mode=continue&node=' + nextNode;
+            } else {
+                window.location.href = '/story?mode=continue';
+            }
+        }
+
+        function getUserId() {
+            const match = document.cookie.match(/user_id=([^;]+)/);
+            return match ? match[1] : '';
+        }
+    </script>
+</body>
+</html>

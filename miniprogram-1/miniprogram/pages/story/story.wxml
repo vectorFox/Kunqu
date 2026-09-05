@@ -1,0 +1,108 @@
+<!--pages/story/story.wxml-->
+<view class="story-container">
+  <!-- 背景层 - 开发阶段使用CSS渐变，后续替换为背景图片 -->
+  <!-- TODO: 后续添加背景图片 main_background.png (排练厅场景) -->
+  <view class="background-layer">
+    <view class="background-text">排练厅场景</view>
+  </view>
+
+  <!-- 前景装饰层 - 开发阶段使用CSS装饰，后续替换为装饰图片 -->
+  <!-- TODO: 后续添加前景装饰图片 foreground_decoration.png (折扇、梅花等装饰元素) -->
+  <view class="foreground-layer"></view>
+
+  <!-- 人物立绘层 - 开发阶段使用文字描述，后续替换为图片 -->
+  <!-- TODO: 后续添加人物立绘图片 -->
+  <!-- 需要图片：lishifu.png (李师父), jinliqing.png (金丽卿) -->
+  <view class="character-layer">
+    <!-- 李师父文字描述 -->
+    <view class="character-text master-li {{showMasterLi ? 'show' : 'hide'}}">
+      <view class="character-text-box">
+        <text class="character-title">李师父</text>
+        <text class="character-desc">五十余岁，面容慈祥，长须花白，目光温和</text>
+        <text class="character-desc">身穿深色长衫，腰间素色腰带</text>
+      </view>
+    </view>
+    
+    <!-- 金丽卿文字描述 -->
+    <view class="character-text jin-liqing {{showJinLiqing ? 'show' : 'hide'}}">
+      <view class="character-text-box">
+        <text class="character-title">金丽卿</text>
+        <text class="character-desc">二十三四岁，面容清秀，眉目如画</text>
+        <text class="character-desc">身穿青色戏服，水袖飘逸</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- UI交互层 -->
+  <view class="ui-layer">
+    <!-- 顶部状态栏 -->
+    <view class="status-bar">
+      <view class="status-item">
+        <text class="status-label">理解值</text>
+        <text class="status-value">{{gameState.understandingValue}}</text>
+      </view>
+      <view class="status-item">
+        <text class="status-label">好感值</text>
+        <text class="status-value">{{gameState.favorValue}}</text>
+      </view>
+      <view class="status-item">
+        <text class="status-label">积分</text>
+        <text class="status-value">{{gameState.score}}</text>
+      </view>
+      <view class="menu-button" bindtap="toggleMenu">
+        <text class="menu-icon">☰</text>
+      </view>
+    </view>
+
+    <!-- 对话框 -->
+    <view class="dialog-box" wx:if="{{!isEnding}}">
+      <view class="dialog-header">
+        <text class="character-name">{{characterName}}</text>
+      </view>
+      <view class="dialog-content">
+        <text class="story-text">{{storyText}}</text>
+      </view>
+    </view>
+
+    <!-- 结局显示 -->
+    <view class="ending-box" wx:if="{{isEnding}}">
+      <view class="ending-header">
+        <text class="ending-title">{{currentNode.endingName}}</text>
+      </view>
+      <view class="ending-content">
+        <text class="ending-text">{{storyText}}</text>
+      </view>
+      <view class="ending-button" bindtap="onEndingConfirm">
+        <text class="button-text">返回</text>
+      </view>
+    </view>
+
+    <!-- 选项按钮 -->
+    <view class="options-container" wx:if="{{availableOptions.length > 0 && !isEnding}}">
+      <view class="option-item {{item.selected ? 'selected' : ''}}" 
+            wx:for="{{availableOptions}}" 
+            wx:key="index"
+            wx:for-item="item"
+            data-index="{{index}}"
+            bindtap="onSelectOption">
+        <text class="option-text">{{item.text}}</text>
+      </view>
+    </view>
+
+    <!-- 菜单弹窗 -->
+    <view class="menu-overlay" wx:if="{{showMenu}}" bindtap="toggleMenu">
+      <view class="menu-panel" catchtap="">
+        <view class="menu-item" bindtap="goToMenu">
+          <text>返回主菜单</text>
+        </view>
+        <view class="menu-item" bindtap="restartGame">
+          <text>重新开始</text>
+        </view>
+        <view class="menu-item" bindtap="toggleMenu">
+          <text>取消</text>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>
+

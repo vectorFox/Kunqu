@@ -1,0 +1,4 @@
+<!--index.wxml - 已废弃，直接跳转到菜单页面-->
+<view class="container">
+  <view class="loading-text">正在加载...</view>
+</view>

@@ -1,0 +1,72 @@
+<!--pages/archive/archive.wxml-->
+<view class="archive-container">
+  <!-- 背景 -->
+  <view class="background-layer"></view>
+
+  <!-- 顶部标题 -->
+  <view class="header-section">
+    <view class="header-title">
+      <text class="title-text">我的档案</text>
+    </view>
+    <view class="header-subtitle">
+      <text>学习记录与成就</text>
+    </view>
+  </view>
+
+  <!-- 统计信息 -->
+  <view class="stats-section">
+    <view class="stat-item">
+      <text class="stat-value">{{stats.totalCharacters}}</text>
+      <text class="stat-label">已识角色</text>
+    </view>
+    <view class="stat-item">
+      <text class="stat-value">{{stats.totalQuiz}}</text>
+      <text class="stat-label">答题总数</text>
+    </view>
+    <view class="stat-item">
+      <text class="stat-value">{{stats.accuracy}}%</text>
+      <text class="stat-label">正确率</text>
+    </view>
+  </view>
+
+  <!-- 档案列表 -->
+  <scroll-view class="archive-list" scroll-y>
+    <view class="archive-card" 
+          wx:for="{{archiveList}}" 
+          wx:key="id"
+          wx:for-item="item"
+          data-item="{{item}}"
+          bindtap="viewDetail">
+      <view class="card-header">
+        <view class="card-icon" wx:if="{{item.type === 'character'}}">
+          <text>🎭</text>
+        </view>
+        <view class="card-icon" wx:else>
+          <text>📝</text>
+        </view>
+        <view class="card-title">
+          <text class="card-name">{{item.name || item.question || '未知'}}</text>
+          <text class="card-type" wx:if="{{item.type === 'character'}}">{{item.role}} · {{item.play}}</text>
+        </view>
+      </view>
+      <view class="card-content">
+        <text class="card-description">{{item.description || item.explanation || '暂无描述'}}</text>
+      </view>
+      <view class="card-footer">
+        <text class="card-time">{{item.createTime ? '获得时间：' + item.createTime : ''}}</text>
+      </view>
+    </view>
+
+    <!-- 空状态 -->
+    <view class="empty-state" wx:if="{{archiveList.length === 0}}">
+      <text class="empty-text">暂无学习记录</text>
+      <text class="empty-hint">开始游戏，解锁更多内容吧！</text>
+    </view>
+  </scroll-view>
+
+  <!-- 返回按钮 -->
+  <view class="back-button" bindtap="goBack">
+    <text>返回</text>
+  </view>
+</view>
+

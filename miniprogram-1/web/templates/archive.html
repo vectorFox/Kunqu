@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>游园惊梦 - 学习档案</title>
+    <link rel="stylesheet" href="/static/css/common.css">
+    <link rel="stylesheet" href="/static/css/archive.css">
+</head>
+<body>
+    <div class="archive-container">
+        <!-- 背景层 -->
+        <div class="background-layer"></div>
+
+        <!-- 页面标题 -->
+        <div class="page-header">
+            <h1 class="page-title">学习档案</h1>
+            <button class="back-button" onclick="goBack()">返回</button>
+        </div>
+
+        <!-- 档案内容 -->
+        <div class="archive-content">
+            <!-- 统计卡片 -->
+            <div class="stats-section">
+                <div class="stat-card">
+                    <div class="stat-value">{{ user.score }}</div>
+                    <div class="stat-label">累计积分</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">{{ total_quizzes }}</div>
+                    <div class="stat-label">答题总数</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">{{ accuracy }}%</div>
+                    <div class="stat-label">正确率</div>
+                </div>
+            </div>
+
+            <!-- 游戏进度 -->
+            <div class="progress-section">
+                <h2 class="section-title">游戏进度</h2>
+                <div class="progress-item">
+                    <span class="progress-label">当前章节</span>
+                    <span class="progress-value">{{ user.current_chapter or '第一章' }}</span>
+                </div>
+                <div class="progress-item">
+                    <span class="progress-label">理解值</span>
+                    <span class="progress-value">{{ user.understanding_value }}</span>
+                </div>
+                <div class="progress-item">
+                    <span class="progress-label">好感值</span>
+                    <span class="progress-value">{{ user.favor_value }}</span>
+                </div>
+            </div>
+
+            <!-- 答题历史 -->
+            <div class="history-section">
+                <h2 class="section-title">答题记录</h2>
+                {% if quiz_history %}
+                <div class="history-list">
+                    {% for item in quiz_history %}
+                    <div class="history-item {{ 'correct' if item.is_correct else 'incorrect' }}">
+                        <div class="history-question">{{ item.question }}</div>
+                        <div class="history-answer">
+                            你的答案: {{ item.selected_answer + 1 }}题 |
+                            {% if item.is_correct %}
+                            <span class="answer-correct">正确</span>
+                            {% else %}
+                            <span class="answer-incorrect">错误</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="empty-state">
+                    <p>暂无答题记录</p>
+                    <p>开始游戏后即可查看</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function goBack() {
+            window.location.href = '/';
+        }
+    </script>
+</body>
+</html>
